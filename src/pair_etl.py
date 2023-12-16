@@ -3,44 +3,29 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns 
+
+import os
+import sys
+
+from dotenv import load_dotenv
+load_dotenv()
+sys.path.append("../")
 pd.set_option('display.max_columns', None) 
 
 # %%
-df_clientes = pd.read_csv('ficheros/clientes.csv')
 
+def lectura_archivos ():
+   df_clientes = pd.read_csv('src/clientes.csv')
+   df_productos = pd.read_csv('src/productos.csv', on_bad_lines='skip')
+   df_ventas = pd.read_csv('src/ventas.csv')
+   
+   df_union_1 = df_clientes.merge(df_ventas, left_on='id', right_on= 'ID_Cliente', how= 'left')
+   df_final = df_union_1.merge(df_productos, left_on= 'ID_Producto', right_on= 'ID', how='left' )
 
-# %%
-df_productos = pd.read_csv('ficheros/productos.csv', on_bad_lines='skip')
-
-
-# %%
-df_ventas = pd.read_csv('ficheros/ventas.csv')
-
-# %%
-#Unimos por ID clientes
-df_union_1 = df_clientes.merge(df_ventas, left_on='id', right_on= 'ID_Cliente', how= 'left')
-
-# %%
-
-#Unimos por ID productos
-df_final = df_union_1.merge(df_productos, left_on= 'ID_Producto', right_on= 'ID', how='left' )
+   return df_final
+#%%  
+df_final = lectura_archivos()
 #%%
-
-df_clientes.shape
-#1000,8
-#%%
-df_ventas.shape
-#100,5
-#%%
-df_productos.shape
-#21,7
-#%%
-
-df_union_1.shape
-#100,13 
-#%%
-df_final.head(5)
-# %%
 # generamos un DataFrame para los valores nulos
 def datos_generales (dataframe):
     print("Los nulos que tenemos en el conjunto de datos son:")
@@ -62,4 +47,4 @@ def datos_generales (dataframe):
 #%%
 resultados = datos_generales(df_final)
 # %%
-df_final['first_name'].value_counts()
+df_final['Descripción_2'].value_counts()
