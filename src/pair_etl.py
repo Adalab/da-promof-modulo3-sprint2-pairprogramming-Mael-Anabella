@@ -52,14 +52,15 @@ def datos_generales (dataframe):
         print(pd.DataFrame(dataframe[col].value_counts()).head())    
 #%%
 resultados = datos_generales(df_final)
+#%%
+df_final.head(3)
 # %%
 def homogeneizar_columnas(dataframe):
+   
+   df_final.drop(columns=['id', 'Descripción_2'], inplace=True)
    columnas_minus = {columna: columna.lower() for columna in df_final.columns} 
    df_final.rename(columns = columnas_minus ,inplace = True)
-
-   df_final.drop(columns=['id_cliente', 'descripción_2'],inplace=True)
-
-   df_final.rename
+   df_final.replace({'id_ventas':'id'})
    return df_final
 # %%
 homogeneizar_columnas(df_final)
@@ -67,16 +68,45 @@ homogeneizar_columnas(df_final)
 #Empezamos a gestionar nulos
 #Variables categoricas
 
-#lista de columnas categóricas que tienen nulos
-nulos_categoricas = df_final[df_final.columns[df_final.isnull().any()]].select_dtypes(include = "O").columns
-print("Las columnas categóricas que tienen nulos son : \n ")
-print(nulos_categoricas)
-# %%
-for columna in nulos_categoricas:
-    print(f"La distribución de las categorías para la columna {columna.upper()}")
-    display(df_final[columna].value_counts() / df_final.shape[0])
-    print("..........")
-# %%
-df_final.columns
+def gestion_nulos (dataframe):
+    #Nulos en el conjunto de datos
+    print("Los nulos que tenemos en el conjunto de datos son:")
+    df_nulos = pd.DataFrame(df_final.isnull().sum() / df_final.shape[0] * 100, columns = ["%_nulos"])
+    print(df_nulos[df_nulos["%_nulos"] > 0])
+
+    #lista de columnas categóricas que tienen nulos
+    print(' ....... ')
+    nulos_categoricas = df_final[df_final.columns[df_final.isnull().any()]].select_dtypes(include = "O").columns
+    print("Las columnas categóricas que tienen nulos son : \n ")
+    print(nulos_categoricas)
+
+    for columna in nulos_categoricas:
+        print(f"La distribución de las categorías para la columna {columna.upper()}")
+        display(df_final[columna].value_counts() / df_final.shape[0])
+        print("..........")
+    #columnas numericas que tienen nulos
+    nulos_numericas = df_final[df_final.columns[df_final.isnull().any()]].select_dtypes(include = np.number).columns
+    print("Las columnas numéricas que tienen nulos son : \n ")
+    print(nulos_numericas)
+    #porcentajes de nulos por columna 
+    df_final[nulos_numericas].isnull().sum() / df_final.shape[0]
+
 #%%
-df_final['']
+#NULOS email             2.523364
+#gender            8.504673
+#city             12.897196
+#country          16.168224
+#address           3.831776
+#id_cliente       90.654206
+#id_producto      90.654206
+#fecha_venta      90.654206
+#cantidad         90.654206
+#total            90.654206
+#id               99.252336
+#nombre_producto  99.252336
+#categoría        99.252336
+#precio           99.252336
+#origen           99.252336
+#descripción      99.252336
+#%%
+gestion_nulos(df_final)
