@@ -49,7 +49,7 @@ def datos_generales (dataframe):
     
     for col in dataframe_categoricas.columns:
         print(f"La columna {col.upper()} tiene las siguientes valore únicos:")
-        print(pd.DataFrame(dataframe[col].value_counts()).head())    
+        print(pd.DataFrame(dataframe[col].value_counts()).head())   
 #%%
 resultados = datos_generales(df_final)
 #%%
@@ -110,3 +110,36 @@ def gestion_nulos (dataframe):
 #descripción      99.252336
 #%%
 gestion_nulos(df_final)
+
+# %%
+df_final['email']=df_final['email'].replace(np.nan, "desconocido")
+df_final['gender']=df_final['gender'].replace(np.nan, "desconocido")
+df_final['country']=df_final['country'].replace(np.nan, "desconocido")
+df_final['city']=df_final['city'].replace(np.nan, "desconocido")
+df_final['id_cliente']=df_final['id_cliente'].replace(np.nan, "desconocido")
+df_final['id_producto']=df_final['id_producto'].replace(np.nan, "desconocido")
+df_final['fecha_venta']=df_final['fecha_venta'].replace(np.nan, "desconocido")
+df_final['cantidad']=df_final['cantidad'].replace(np.nan, "desconocido")
+df_final['total']=df_final['total'].replace(np.nan, "desconocido")
+df_final['id']=df_final['id'].replace(np.nan, "desconocido")
+df_final['nombre_producto']=df_final['nombre_producto'].replace(np.nan, "desconocido")
+df_final['nombre_producto']=df_final['nombre_producto'].replace(np.nan, "desconocido")
+df_final['categoría']=df_final['categoría'].replace(np.nan, "desconocido")
+df_final['precio']=df_final['precio'].replace(np.nan, "desconocido")
+df_final['origen']=df_final['origen'].replace(np.nan, "desconocido")
+df_final['descripción']=df_final['descripción'].replace(np.nan, "desconocido")
+# %%
+df_final.info()
+
+df_final.describe()
+# %%
+df_final['Clientes'] = np.where(df_final['id_cliente'] == "desconocido", 'no dado de alta', 'dado de alta')
+
+# %%
+plt.figure(figsize=(8, 6))
+sns.countplot(data=df_final, x='no dado de alta')
+plt.title('Clientes Dados de Alta vs No Dados de Alta')
+plt.xlabel('Estado de Alta')
+plt.ylabel('Cantidad de Clientes')
+plt.show()
+# %%
