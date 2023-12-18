@@ -19,7 +19,6 @@ sys.path.append("../")
 pd.set_option('display.max_columns', None) 
 
 # %%
-
 def lectura_archivos ():
    df_clientes = pd.read_csv('clientes.csv')
    df_productos = pd.read_csv('productos.csv', on_bad_lines='skip')
@@ -32,7 +31,6 @@ def lectura_archivos ():
 #%%  
 df_final = lectura_archivos()
 #%%
-# generamos un DataFrame para los valores nulos
 def datos_generales (dataframe):
     print("Los nulos que tenemos en el conjunto de datos son:")
     df_nulos = pd.DataFrame(dataframe.isnull().sum() / dataframe.shape[0] * 100, columns = ["%_nulos"])
@@ -133,11 +131,11 @@ df_final.info()
 
 df_final.describe()
 # %%
-df_final['Clientes'] = np.where(df_final['id_cliente'] == "desconocido", 'no dado de alta', 'dado de alta')
+df_final['clientes'] = np.where(df_final['id_cliente'] == "desconocido", 'no dado de alta', 'dado de alta')
 
 # %%
 plt.figure(figsize=(8, 6))
-sns.countplot(data=df_final, x='no dado de alta')
+sns.countplot(data=df_final, x='clientes')
 plt.title('Clientes Dados de Alta vs No Dados de Alta')
 plt.xlabel('Estado de Alta')
 plt.ylabel('Cantidad de Clientes')
